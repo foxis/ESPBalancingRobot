@@ -1,0 +1,76 @@
+<html>
+
+<!-- Plotly.js -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script>
+    ws = new WebSocket('ws://' + window.location.hostname + '/log')
+    var request_data_interval
+    ws.onopen = function()
+    {
+				ws.send("get-data");
+        request_data_interval = window.setInterval(requestData, 100);
+    };
+
+		var now = [];
+		var ci = [];
+		var ti = [];
+		var cs = [];
+		var fc = [];
+		var ts = [];
+
+    ws.onmessage = function (evt)
+    {
+        var received_msg = evt.data;
+
+        data = JSON.parse(evt.data);
+
+				now.push(data.now);
+				ci.push(data.ci);
+				ti.push(data.ti);
+				cs.push(data.cs);
+				fc.push(data.fc);
+				ts.push(data.ts);
+
+        var my_plot = [
+					{
+            x: now,
+            y: ci,
+            type: 'scatter',
+						mode: 'lines',
+						name: 'Inclination'
+        	},
+					{
+            x: now,
+            y: ti,
+            type: 'scatter',
+						mode: 'lines',
+						name: 'Target'
+        	},
+					{
+            x: now,
+            y: cs,
+            type: 'scatter',
+						mode: 'lines',
+						name: 'Speed'
+        	}
+				]
+        Plotly.newPlot('sine-graph', my_plot);
+    };
+
+    ws.onclose = function()
+    {
+      // websocket is closed.
+      window.clearInterval(request_data_interval)
+    };
+
+    function requestData()
+    {
+        ws.send("get-data");
+    }
+</script>
+<body>
+</body>
+<div id="sine-graph" style="width: 100%; height: 100%;">
+
+</html>
