@@ -24,7 +24,7 @@ You can start assembling the robot.
 
 # Construction
 
-![Schematics of the robot](schematics/Balancing_Robot_bb.png)
+![Schematics of the robot](schematics/Balancing Robot_bb.png)
 
 ## Wheel base
 
