@@ -20,7 +20,7 @@
 #include <EasyOTA.h>
 #include <ESPAsyncWebServer.h>
 #include <SPIFFSEditor.h>
-#include "Robot.h"
+#include "DiffDriveBalancerNoEnc.h"
 
 #ifndef USE_LOGGING
 #include <ESPUI.h>
@@ -33,9 +33,16 @@
 #define LABEL_INCLINATION "Inclination:"
 #define LABEL_SPEED "Speed:"
 #define LABEL_HEADING "Heading:"
+#define MOTOR_A0  14
+#define MOTOR_B0  12
+#define MOTOR_A1  0
+#define MOTOR_B1  2
+#define IMU_ADDR 0x68
+#define IMU_SDA   3
+#define IMU_SCL   1
 
 EasyOTA OTA(ARDUINO_HOSTNAME);
-Robot robot(500, 124.0);
+Locomotion::DiffDriveBalancerNoEncoders robot(500, IMU_SDA, IMU_SCL, IMU_ADDR, MOTOR_A0, MOTOR_B0, MOTOR_A1, MOTOR_B1, 24.0);
 #ifdef USE_LOGGING
 AsyncWebServer logger_server(80);
 AsyncWebSocket logger("/log");
